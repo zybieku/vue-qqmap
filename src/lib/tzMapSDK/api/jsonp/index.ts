@@ -156,14 +156,17 @@ export function jsonp<T = any>(
   });
 }
 
-export function qqMapApi(url: string, param: IJsonpParam = {}) {
+export function qqMapApi<T extends Record<string, any>>(
+  url: string,
+  param: IJsonpParam = {}
+) {
   url = url.startsWith("http")
     ? url.trim()
     : `https://apis.map.qq.com/ws` + url.trim();
   param.key = "5JZBZ-GSIWZ-2F4XH-Z77S2-A6Z7Q-OGB3Q";
   param.output = "jsonp";
-  return new Promise((resolve, reject) => {
-    jsonp(url, param)
+  return new Promise<T>((resolve, reject) => {
+    jsonp<T>(url, param)
       .then((res) => {
         if (res?.status === 0) {
           resolve(res);

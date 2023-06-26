@@ -1,15 +1,8 @@
 <script lang="tsx">
-import {
-  defineComponent,
-  nextTick,
-  onMounted,
-  onUnmounted,
-  reactive,
-} from "vue";
-import { props } from "./props";
-import QQMapWX from "../service/QQMapWX";
-import { useMarks } from "./hooks/useMarks";
+import { defineComponent, nextTick, onMounted } from "vue";
 import { useMap } from "./hooks/useMap";
+import { useMarks } from "./hooks/useMarks";
+import { props } from "./props";
 
 export default defineComponent({
   name: "TzMap",
@@ -31,49 +24,6 @@ export default defineComponent({
         });
       }
       initMultiMarker(mapCtx);
-      QQMapWX.instance
-        .reverseGeocoder({
-          location: "39.984154,116.307490",
-        })
-        .then((res) => {
-          console.log(res.result, 1);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      QQMapWX.instance
-        .geocoder({
-          address: "北京市海淀区彩和坊路海淀西大街74号",
-        })
-        .then((res) => {
-          console.log(res.result.location, 2);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      QQMapWX.instance
-        .direction({
-          from: `39.915285,116.403857`,
-          to: `39.915285,116.803857`,
-          waypoints: `39.111,116.112;39.112,116.113`,
-        })
-        .then((res) => {
-          console.log(res.result);
-        });
-      QQMapWX.instance
-        .calculateDistance({
-          from: `39.915285,116.403857`,
-          to: `39.915285,116.803857`,
-          waypoints: `39.111,116.112;39.112,116.113`,
-        })
-        .then((res) => {
-          console.log(res.result);
-        });
-
-      QQMapWX.instance.getIpLocation().then((res) => {
-        console.log(res.result);
-      });
     });
 
     expose({ setCenter, destory, ...exposeMarker });
@@ -90,3 +40,4 @@ export default defineComponent({
   width: 100%;
 }
 </style>
+../service/TMapWeb

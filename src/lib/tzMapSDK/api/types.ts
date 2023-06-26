@@ -644,12 +644,9 @@ export interface IpLocationOption {
   ip?: string;
 }
 
-export interface IpLocationOptionResp extends IMapBaseResp {
-  /**
-   * 结果数组，第0项，代表一级行政区划，第1项代表二级行政区划，以此类推；使用getchildren接口时，仅为指定父级行政区划的子级
-   */
+export interface IpLocationResp extends IMapBaseResp {
   result: {
-    ip: string; //	行政区划唯一标识
+    ip: string; //	ip
     name: string; //	简称，如“内蒙古”
     /**
      * 中心点坐标
@@ -667,4 +664,33 @@ export interface IpLocationOptionResp extends IMapBaseResp {
       adcode: number; //
     };
   };
+}
+
+/**
+ * 坐标转换
+ */
+export interface ITranslateOption {
+  /**
+   * 输入的locations的坐标类型，可选值：
+   * 1 GPS坐标
+   * 2 sogou经纬度
+   * 3 baidu经纬度
+   * 4 mapbar经纬度
+   * 6 sogou墨卡托
+   */
+  type: number;
+
+  /**
+   * 预转换的坐标，支持批量转换，
+   * 纬度前，经度后，纬度和经度之间用",“分隔，每组坐标之间使用”;"分隔；
+   * locations=39.12,116.83;30.21,115.43
+   */
+  locations: string;
+}
+
+export interface ITranslateResp extends IMapBaseResp {
+  /**
+   * 结果数组
+   */
+  locations: ILatLngResp[];
 }

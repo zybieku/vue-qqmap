@@ -14,8 +14,10 @@ import type {
   ISearchResp,
   ISuggestionOption,
   ISuggestionResp,
+  ITranslateOption,
+  ITranslateResp,
   IpLocationOption,
-  IpLocationOptionResp,
+  IpLocationResp,
 } from "./types.js";
 interface QQMapOption {
   key: string;
@@ -24,25 +26,25 @@ interface QQMapOption {
 /**
  * 腾讯地图SDK
  */
-export default class QQMapWX {
-  private static _instance: QQMapWX | null = null;
+export default class TMapWeb {
+  private static _instance: TMapWeb | null = null;
   private qqmapsdk: any;
 
-  public static get instance(): QQMapWX {
-    if (!QQMapWX._instance) {
-      QQMapWX._instance = new QQMapWX();
+  public static get instance(): TMapWeb {
+    if (!TMapWeb._instance) {
+      TMapWeb._instance = new TMapWeb();
     }
-    return QQMapWX._instance;
+    return TMapWeb._instance;
   }
 
   public static init(option: QQMapOption) {
-    QQMapWX._instance = QQMapWX.instance;
-    return QQMapWX._instance;
+    TMapWeb._instance = TMapWeb.instance;
+    return TMapWeb._instance;
   }
 
   /**
    * 获取QQMapSDK实例
-   * @returns QQMapWX
+   * @returns TMapWeb
    */
   qqMapsdk() {
     return this.qqmapsdk;
@@ -53,11 +55,8 @@ export default class QQMapWX {
    * @param options ISearchOption
    * @returns Promise<ISearchResp>
    */
-  search(options: ISearchOption): Promise<ISearchResp> {
-    return qqMapApi(`/place/v1/search`, options).then((res) => {
-      console.log(res);
-      return res;
-    });
+  search(options: ISearchOption) {
+    return qqMapApi<ISearchResp>(`/place/v1/search`, options);
   }
 
   /**
@@ -67,17 +66,7 @@ export default class QQMapWX {
    * @returns Promise<ISuggestionResp>
    */
   getSuggestion(options: ISuggestionOption): Promise<ISuggestionResp> {
-    return new Promise((reslove, reject) => {
-      this.qqmapsdk.getSuggestion({
-        ...options,
-        success: function (res) {
-          reslove(res);
-        },
-        fail: function (err) {
-          reject(err);
-        },
-      });
-    });
+    return qqMapApi(`/place/v1/suggestion/`, options);
   }
 
   /**
@@ -86,10 +75,8 @@ export default class QQMapWX {
    * @param options IReverseGeocoderOption
    * return Promise<IReverseGeocoderResp>
    */
-  reverseGeocoder(
-    options: IReverseGeocoderOption
-  ): Promise<IReverseGeocoderResp> {
-    return qqMapApi("/geocoder/v1/", options);
+  reverseGeocoder(options: IReverseGeocoderOption) {
+    return qqMapApi<IReverseGeocoderResp>("/geocoder/v1/", options);
   }
   /**
    *  提供由地址描述到所述位置坐标的转换，与逆地址解析reverseGeocoder()的过程正好相反。
@@ -128,9 +115,9 @@ export default class QQMapWX {
   /**
    * 获取当前ip的为准的地理位置信息。
    * @param options IpLocationOption
-   * @returns   Promise<IpLocationOptionResp>
+   * @returns   Promise<IpLocationResp>
    */
-  getIpLocation(options: IpLocationOption = {}): Promise<IpLocationOptionResp> {
+  getIpLocation(options: IpLocationOption = {}): Promise<IpLocationResp> {
     return qqMapApi("/location/v1/ip", options);
   }
 
@@ -141,17 +128,7 @@ export default class QQMapWX {
    * @returns Promise<ICityResp>
    */
   getCityList(options: { sig?: string } = {}): Promise<ICityResp> {
-    return new Promise((reslove, reject) => {
-      this.qqmapsdk.getCityList({
-        ...options,
-        success: function (res) {
-          reslove(res);
-        },
-        fail: function (err) {
-          reject(err);
-        },
-      });
-    });
+    return qqMapApi(`/district/v1/list`, options);
   }
 
   /**
@@ -161,16 +138,15 @@ export default class QQMapWX {
    * @returns Promise<ICityResp>
    */
   getDistrictByCityId(options: ICityByIdOption): Promise<ICityResp> {
-    return new Promise((reslove, reject) => {
-      this.qqmapsdk.getDistrictByCityId({
-        ...options,
-        success: function (res) {
-          reslove(res);
-        },
-        fail: function (err) {
-          reject(err);
-        },
-      });
-    });
+    return qqMapApi(`/district/v1/getchildren`, options);
+  }
+
+  /**
+   * 实现从其它地图供应商坐标系或标准GPS坐标系，
+   * 批量转换到腾讯地图坐标系。
+   * @returns Promise<ITranslateResp>
+   */
+  translate(options: ITranslateOption): Promise<ITranslateResp> {
+    return qqMapApi(`/coord/v1/translate`, options);
   }
 }
