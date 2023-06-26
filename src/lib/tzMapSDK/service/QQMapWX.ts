@@ -1,4 +1,4 @@
-import QQMapSdk from "./qqmap-wx-jssdk.min.js";
+import { qqMapApi } from "./jsonp/index.js";
 import type {
   ICalculateDistanceOption,
   ICalculateDistanceResp,
@@ -14,6 +14,8 @@ import type {
   ISearchResp,
   ISuggestionOption,
   ISuggestionResp,
+  IpLocationOption,
+  IpLocationOptionResp,
 } from "./types.js";
 interface QQMapOption {
   key: string;
@@ -24,8 +26,7 @@ interface QQMapOption {
  */
 export default class QQMapWX {
   private static _instance: QQMapWX | null = null;
-
-  private qqmapsdk: InstanceType<typeof QQMapSdk>;
+  private qqmapsdk: any;
 
   public static get instance(): QQMapWX {
     if (!QQMapWX._instance) {
@@ -36,7 +37,6 @@ export default class QQMapWX {
 
   public static init(option: QQMapOption) {
     QQMapWX._instance = QQMapWX.instance;
-    QQMapWX._instance.qqmapsdk = new QQMapSdk(option);
     return QQMapWX._instance;
   }
 
@@ -54,16 +54,9 @@ export default class QQMapWX {
    * @returns Promise<ISearchResp>
    */
   search(options: ISearchOption): Promise<ISearchResp> {
-    return new Promise((reslove, reject) => {
-      this.qqmapsdk.search({
-        ...options,
-        success: function (res) {
-          reslove(res);
-        },
-        fail: function (err) {
-          reject(err);
-        },
-      });
+    return qqMapApi(`/place/v1/search`, options).then((res) => {
+      console.log(res);
+      return res;
     });
   }
 
@@ -96,17 +89,7 @@ export default class QQMapWX {
   reverseGeocoder(
     options: IReverseGeocoderOption
   ): Promise<IReverseGeocoderResp> {
-    return new Promise((reslove, reject) => {
-      this.qqmapsdk.reverseGeocoder({
-        ...options,
-        success: function (res) {
-          reslove(res);
-        },
-        fail: function (err) {
-          reject(err);
-        },
-      });
-    });
+    return qqMapApi("/geocoder/v1/", options);
   }
   /**
    *  提供由地址描述到所述位置坐标的转换，与逆地址解析reverseGeocoder()的过程正好相反。
@@ -115,17 +98,7 @@ export default class QQMapWX {
    * @returns  Promise<IGeocoderResp>
    */
   geocoder(options: IGeocoderOption): Promise<IGeocoderResp> {
-    return new Promise((reslove, reject) => {
-      this.qqmapsdk.geocoder({
-        ...options,
-        success: function (res) {
-          reslove(res);
-        },
-        fail: function (err) {
-          reject(err);
-        },
-      });
-    });
+    return qqMapApi("/geocoder/v1/", options);
   }
   /**
    *  提供路线规划能力。
@@ -136,17 +109,8 @@ export default class QQMapWX {
     @param options
    */
   direction(options: IDirectionOption): Promise<IDirectionResp> {
-    return new Promise((reslove, reject) => {
-      this.qqmapsdk.direction({
-        ...options,
-        success: function (res) {
-          reslove(res);
-        },
-        fail: function (err) {
-          reject(err);
-        },
-      });
-    });
+    let { mode = "driving", ...params } = options;
+    return qqMapApi(`/direction/v1/${mode}`, params);
   }
 
   /**
@@ -158,17 +122,16 @@ export default class QQMapWX {
   calculateDistance(
     options: ICalculateDistanceOption
   ): Promise<ICalculateDistanceResp> {
-    return new Promise((reslove, reject) => {
-      this.qqmapsdk.calculateDistance({
-        ...options,
-        success: function (res) {
-          reslove(res);
-        },
-        fail: function (err) {
-          reject(err);
-        },
-      });
-    });
+    return qqMapApi("/distance/v1/matrix/", options);
+  }
+
+  /**
+   * 获取当前ip的为准的地理位置信息。
+   * @param options IpLocationOption
+   * @returns   Promise<IpLocationOptionResp>
+   */
+  getIpLocation(options: IpLocationOption = {}): Promise<IpLocationOptionResp> {
+    return qqMapApi("/location/v1/ip", options);
   }
 
   /**

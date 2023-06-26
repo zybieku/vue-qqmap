@@ -633,3 +633,38 @@ export interface ICityResp extends IMapBaseResp {
     cidx: Array<string>;
   }[];
 }
+
+/**
+ * 获取ip定位
+ */
+export interface IpLocationOption {
+  /**
+   * 对应接口getCityList返回数据的Id，如：北京是’110000’
+   */
+  ip?: string;
+}
+
+export interface IpLocationOptionResp extends IMapBaseResp {
+  /**
+   * 结果数组，第0项，代表一级行政区划，第1项代表二级行政区划，以此类推；使用getchildren接口时，仅为指定父级行政区划的子级
+   */
+  result: {
+    ip: string; //	行政区划唯一标识
+    name: string; //	简称，如“内蒙古”
+    /**
+     * 中心点坐标
+     */
+    location: ILatLngResp;
+    /**
+     * 定位行政区划信息
+     */
+    ad_info: {
+      nation: string; //国家
+      nation_code: number; //国家代码（ISO3166标准3位数字码）
+      province: string; //省
+      city?: string; //市
+      district?: string; //区
+      adcode: number; //
+    };
+  };
+}

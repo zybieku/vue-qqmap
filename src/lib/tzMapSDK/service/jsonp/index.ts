@@ -155,3 +155,22 @@ export function jsonp<T = any>(
     document.body.appendChild(paddingScript);
   });
 }
+
+export function qqMapApi(url: string, param: IJsonpParam = {}) {
+  url = url.startsWith("http")
+    ? url.trim()
+    : `https://apis.map.qq.com/ws` + url.trim();
+  param.key = "5JZBZ-GSIWZ-2F4XH-Z77S2-A6Z7Q-OGB3Q";
+  param.output = "jsonp";
+  return new Promise((resolve, reject) => {
+    jsonp(url, param)
+      .then((res) => {
+        if (res?.status === 0) {
+          resolve(res);
+        } else {
+          reject(res);
+        }
+      })
+      .catch((err) => reject(err));
+  });
+}

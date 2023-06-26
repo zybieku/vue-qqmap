@@ -1,8 +1,4 @@
-lockfileVersion: '6.1'
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
+lockfileVersion: '6.0'
 
 dependencies:
   vue:
@@ -573,7 +569,7 @@ packages:
     dependencies:
       '@babel/core': 7.22.5
       '@babel/plugin-transform-typescript': 7.22.5(@babel/core@7.22.5)
-      '@vue/babel-plugin-jsx': 1.1.3(@babel/core@7.22.5)
+      '@vue/babel-plugin-jsx': 1.1.4(@babel/core@7.22.5)
       vite: 4.3.9(sass@1.63.6)
       vue: 3.2.47
     transitivePeerDependencies:
@@ -635,12 +631,12 @@ packages:
       - typescript
     dev: true
 
-  /@vue/babel-helper-vue-transform-on@1.1.3:
-    resolution: {integrity: sha512-iSaE7+1+/tPp79XnvsAVjaCjuY7dHjfsArPozi+1USJ1A5lf5JUovCP90Hbc+L9BUSHGlXMEYuQrL2vS3Yz9ow==}
+  /@vue/babel-helper-vue-transform-on@1.1.4:
+    resolution: {integrity: sha512-i/+rx6NIx1SeqA6sJJCv0tRPAU/F6lOnxjV9v1DJVGT7rH0CWOluaYfb+ifODVHFj2cEw85X2U6fU0n466ng0Q==}
     dev: true
 
-  /@vue/babel-plugin-jsx@1.1.3(@babel/core@7.22.5):
-    resolution: {integrity: sha512-q4ekWt6KcWmM7GNTZjBO53EOM/5uczu7q1Ks39Sz0d0PJFJ+oNi6xyu17WZ/uoSi/s81ouq99G18cLoEX9X1OA==}
+  /@vue/babel-plugin-jsx@1.1.4(@babel/core@7.22.5):
+    resolution: {integrity: sha512-/F9YSGaxL53aBUwowjtALVBH+HXjXbsDt41NaVHc10HREkutCt51Wukm6sbgrq2sp34Mne+PCvOrjJjM2yLoWA==}
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
@@ -650,7 +646,7 @@ packages:
       '@babel/template': 7.22.5
       '@babel/traverse': 7.22.5
       '@babel/types': 7.22.5
-      '@vue/babel-helper-vue-transform-on': 1.1.3
+      '@vue/babel-helper-vue-transform-on': 1.1.4
       camelcase: 6.3.0
       html-tags: 3.3.1
       svg-tags: 1.0.0
