@@ -3,56 +3,46 @@ import { SetupContext, onUnmounted } from "vue";
 export let useMap = (ctx: SetupContext) => {
   let mapCtx: TMap.Map | null = null;
 
+  let eventNames = [
+    "click",
+    "dblclick",
+    "rightclick",
+    "resize",
+    "move",
+    "zoom",
+    "idle",
+    "tilesloaded",
+    "mousedown",
+    "mouseup",
+    "mousemove",
+    "touchstart",
+    "touchmove",
+    "touchend",
+    "dragstart",
+    "drag",
+    "dragend",
+  ];
+
   let handleEventListener = (e: TMap.MapEvent) => {
-    e.originalEvent.stopPropagation();
+    console.log(e);
+
+    e.originalEvent?.stopPropagation();
     if (e.type) {
       ctx.emit(e.type, e);
     }
   };
 
   function initMapEvent() {
-    [
-      "click",
-      "dblclick",
-      "resize",
-      "zoom",
-      "move",
-      "rightclick",
-      "dragstart",
-      "drag",
-      "dragend",
-    ].forEach((name) => {
-      mapCtx?.on(name, handleEventListener);
+    eventNames.forEach((name) => {
+      let attrName = "on" + name[0].toUpperCase() + name.slice(1);
+      if (ctx.attrs[attrName]) {
+        mapCtx?.on(name, handleEventListener);
+      }
     });
-
-    if (ctx.attrs["onEvent"]) {
-      [
-        "mousedown",
-        "mouseup",
-        "mousemove",
-        "idle",
-        "tilesloaded",
-        "touchstart",
-        "touchmove",
-        "touchend",
-      ].forEach((eventName) => {
-        mapCtx?.on(eventName, handleEventListener);
-      });
-    }
   }
 
   function offMapEvent() {
-    [
-      "click",
-      "dblclick",
-      "resize",
-      "zoom",
-      "move",
-      "rightclick",
-      "dragstart",
-      "drag",
-      "dragend",
-    ].forEach((name) => {
+    eventNames.forEach((name) => {
       mapCtx?.off(name, handleEventListener);
     });
 

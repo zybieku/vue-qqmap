@@ -4,7 +4,7 @@ export let useMarks = (ctx: SetupContext) => {
   let markerCtx: TMap.MultiMarker | null = null;
 
   function handleMarkerListener(e: TMap.GeometryOverlayEvent) {
-    e.originalEvent.stopPropagation();
+    e.originalEvent.stopPropagation?.();
     switch (e.type) {
       case "click":
         ctx.emit("markerClick", e);
